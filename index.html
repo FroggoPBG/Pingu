@@ -109,6 +109,27 @@
       text-align: center;
       margin-top: 20px;
     }
+    /* Texture examples styling */
+    .texture-examples {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: #555;
+      line-height: 1.4;
+    }
+    .texture-examples h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+      color: var(--primary-color);
+    }
+    .texture-examples ul {
+      list-style: disc;
+      margin-left: 20px;
+      padding-left: 0;
+    }
     /* Responsive tweaks */
     @media (max-width: 600px) {
       .container {
@@ -142,8 +163,74 @@
     <!-- Step 2: Texture Selection (Pick exactly 2) -->
     <div id="step2" class="step">
       <h2>Select 2 Food Textures</h2>
+      <!-- Texture Examples Panel -->
+      <div class="texture-examples">
+        <p>Here are food examples for each texture option:</p>
+        <h4>Meaty:</h4>
+        <ul>
+          <li>Steak</li>
+          <li>Roasted chicken</li>
+          <li>Braised short ribs</li>
+          <li>Grilled salmon</li>
+          <li>Pork belly</li>
+          <li>Lamb chops</li>
+          <li>Duck breast</li>
+        </ul>
+        <h4>Crispy:</h4>
+        <ul>
+          <li>Fried chicken</li>
+          <li>Potato chips</li>
+          <li>Spring rolls</li>
+          <li>Tempura</li>
+          <li>Fish and chips</li>
+          <li>Chicharrones</li>
+          <li>Bacon</li>
+        </ul>
+        <h4>Soupy:</h4>
+        <ul>
+          <li>Ramen</li>
+          <li>Pho</li>
+          <li>Chicken noodle soup</li>
+          <li>Clam chowder</li>
+          <li>Tom yum</li>
+          <li>Minestrone</li>
+          <li>Hot pot</li>
+        </ul>
+        <h4>Soft:</h4>
+        <ul>
+          <li>Mashed potatoes</li>
+          <li>Steamed buns</li>
+          <li>Silken tofu</li>
+          <li>Custard</li>
+          <li>Fresh bread</li>
+          <li>Scrambled eggs</li>
+          <li>Risotto</li>
+        </ul>
+        <h4>Carby:</h4>
+        <ul>
+          <li>Rice</li>
+          <li>Pasta</li>
+          <li>Bread</li>
+          <li>Noodles</li>
+          <li>Potatoes</li>
+          <li>Quinoa</li>
+          <li>Tortillas</li>
+        </ul>
+        <h4>Fresh:</h4>
+        <ul>
+          <li>Salad greens</li>
+          <li>Seafood</li>
+          <li>Raw vegetables</li>
+          <li>Sashimi</li>
+          <li>Fresh fruits</li>
+          <li>Ceviche</li>
+          <li>Herbs</li>
+          <li>Raw oysters</li>
+        </ul>
+      </div>
+      <!-- Texture Selection Checkboxes -->
       <div class="checkbox-group" id="textureCheckboxes">
-        <!-- Texture checkboxes will be populated by JS -->
+        <!-- Texture checkboxes will be populated by JavaScript -->
       </div>
       <button onclick="submitTextures()">Next: Select Cuisines</button>
     </div>
@@ -152,7 +239,7 @@
     <div id="step3" class="step">
       <h2>Select Up to 3 Cuisines</h2>
       <div class="checkbox-group" id="cuisineCheckboxes">
-        <!-- Cuisine checkboxes will be populated by JS -->
+        <!-- Cuisine checkboxes will be populated by JavaScript -->
       </div>
       <button onclick="submitCuisines()">Next: Show Recommendations</button>
     </div>
@@ -282,7 +369,7 @@
       }
       
       recommendMeal(cuisine, textures) {
-        // Accept an array of textures and return union of dishes (no duplicates)
+        // Accept an array of textures and return a union of dishes (no duplicates)
         let dishes = [];
         if (!Array.isArray(textures)) textures = [textures];
         textures.forEach(texture => {
@@ -304,7 +391,7 @@
     // Global wizard data.
     const wizard = {
       hunger: "",
-      textures: [], // Array of 2 textures.
+      textures: [], // Array of 2 selected textures.
       cuisines: []  // Array of selected cuisines (up to 3).
     };
     
@@ -337,7 +424,7 @@
       });
     }
     
-    // Limit textures selection to exactly 2.
+    // Limit texture selection to exactly 2.
     function checkTextureLimit(checkbox) {
       const checkedBoxes = document.querySelectorAll('#textureCheckboxes input[type="checkbox"]:checked');
       if (checkedBoxes.length > 2) {
@@ -393,7 +480,7 @@
       const recommendationsDiv = document.getElementById("recommendations");
       recommendationsDiv.innerHTML = "";
     
-      // For each selected cuisine, show recommended dishes based on the 2 chosen textures.
+      // For each selected cuisine, show recommended dishes combining the 2 chosen textures.
       wizard.cuisines.forEach(cuisine => {
         const rec = recommender.recommendMeal(cuisine, wizard.textures);
         const container = document.createElement("div");
@@ -451,7 +538,7 @@
       wizard.hunger = "";
       wizard.textures = [];
       wizard.cuisines = [];
-      // Repopulate checkboxes.
+      // Reset checkboxes by re-initializing them.
       populateTextureCheckboxes();
       populateCuisineCheckboxes();
       showStep("step1");
