@@ -1,164 +1,467 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our 2nd Anniversary Quiz</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f0f8ff;
-        }
-        .quiz-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .question {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            background: #f8f9fa;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        button {
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            background: #4CAF50;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #45a049;
-        }
-        .correct {
-            background: #4CAF50 !important;
-        }
-        .incorrect {
-            background: #ff4d4d !important;
-        }
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            display: none;
-        }
-        .hearts {
-            color: #ff4d6d;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Food Recommender Wizard</title>
+  <style>
+    /* Fonts and Colors */
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600&display=swap');
+
+    :root {
+      --bg-color: #fefefe;
+      --container-bg: #fff5f7;
+      --primary-color: #ff7f9c;
+      --secondary-color: #ffb3c6;
+      --accent-color: #ffdde1;
+      --text-color: #444;
+      --button-bg: #ff7f9c;
+      --button-hover: #ff5b80;
+      --border-color: #ffdde1;
+      --shadow-color: rgba(255, 127, 156, 0.4);
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: var(--accent-color);
+      padding: 20px;
+      margin: 0;
+      color: var(--text-color);
+    }
+    .container {
+      background: var(--container-bg);
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px var(--shadow-color);
+      border: 2px solid var(--border-color);
+    }
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      font-size: 2.2em;
+    }
+    h2, h3 {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .step {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .step.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .option-buttons button, .final-cuisine button, .restart-button button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 25px;
+      background: var(--button-bg);
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+    .option-buttons button:hover,
+    .final-cuisine button:hover,
+    .restart-button button:hover {
+      background: var(--button-hover);
+    }
+    .checkbox-group {
+      margin-bottom: 20px;
+    }
+    .checkbox-group label {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .checkbox-group input {
+      margin-right: 10px;
+      transform: scale(1.2);
+      vertical-align: middle;
+    }
+    .dish-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .dish-list li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .final-cuisine button {
+      margin: 5px;
+    }
+    .restart-button {
+      text-align: center;
+      margin-top: 20px;
+    }
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+      .option-buttons button {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <h1>💝 Our 2nd Anniversary Quiz 💝</h1>
-        <div id="quiz">
-            <div class="question">
-                <h3>1. When was our first date?</h3>
-                <div class="options">
-                    <button onclick="checkAnswer(1, this)" data-correct="true">4th November, 2022</button>
-                    <button onclick="checkAnswer(1, this)">2nd November, 2022</button>
-                    <button onclick="checkAnswer(1, this)">31st October, 2022</button>
-                </div>
-            </div>
-            <div class="question">
-                <h3>2. What did we eat on our first date?</h3>
-                <div class="options">
-                    <button onclick="checkAnswer(2, this)" data-correct="true">Alcohol</button>
-                    <button onclick="checkAnswer(2, this)">Vietnamese</button>
-                    <button onclick="checkAnswer(2, this)">Brunch</button>
-                </div>
-            </div>
-            <div class="question">
-                <h3>3. Where was our first kiss?</h3>
-                <div class="options">
-                    <button onclick="checkAnswer(3, this)">Your Home</button>
-                    <button onclick="checkAnswer(3, this)">TST Harbour</button>
-                    <button onclick="checkAnswer(3, this)" data-correct="true">North Point Wharf</button>
-                </div>
-            </div>
-            <div class="question">
-                <h3>4. What's my favorite pet name that you call me?</h3>
-                <div class="options">
-                    <button onclick="checkAnswer(4, this)" data-correct="true">Froggo</button>
-                    <button onclick="checkAnswer(4, this)">Princess Bubble Gum</button>
-                    <button onclick="checkAnswer(4, this)">Princess Blood Diamond</button>
-                </div>
-            </div>
-            <div class="question">
-                <h3>5. What was our first movie together?</h3>
-                <div class="options">
-                    <button onclick="checkAnswer(5, this)">Spider-Man: Across the Spider-Verse</button>
-                    <button onclick="checkAnswer(5, this)">A man called Otto</button>
-                    <button onclick="checkAnswer(5, this)" data-correct="true">Black Panther</button>
-                </div>
-            </div>
-            <button onclick="showResult()">Show Results 💕</button>
-        </div>
-        <div id="result"></div>
+  <div class="container">
+    <h1>Food Recommender</h1>
+    
+    <!-- Step 1: Hungry Level -->
+    <div id="step1" class="step active">
+      <h2>How hungry are you?</h2>
+      <div class="option-buttons">
+        <button onclick="selectHunger('Starving')">Starving (need a big meal ASAP)</button>
+        <button onclick="selectHunger('Pretty Hungry')">Pretty Hungry (ready for a proper meal)</button>
+        <button onclick="selectHunger('Slightly Hungry')">Slightly Hungry (could eat something light)</button>
+        <button onclick="selectHunger('Just Peckish')">Just Peckish (small bite)</button>
+      </div>
     </div>
+    
+    <!-- Step 2: Texture Selection (Pick exactly 2) -->
+    <div id="step2" class="step">
+      <h2>Select 2 Food Textures</h2>
+      <div class="checkbox-group" id="textureCheckboxes">
+        <!-- Texture checkboxes will be populated by JS -->
+      </div>
+      <button onclick="submitTextures()">Next: Select Cuisines</button>
+    </div>
+    
+    <!-- Step 3: Cuisine Selection (Pick up to 3) -->
+    <div id="step3" class="step">
+      <h2>Select Up to 3 Cuisines</h2>
+      <div class="checkbox-group" id="cuisineCheckboxes">
+        <!-- Cuisine checkboxes will be populated by JS -->
+      </div>
+      <button onclick="submitCuisines()">Next: Show Recommendations</button>
+    </div>
+    
+    <!-- Step 4: Show Recommendations & Final Cuisine Choice -->
+    <div id="step4" class="step">
+      <h2>Recommendations Based on Your Textures</h2>
+      <div id="recommendations"></div>
+      <h2>Which cuisine appeals to you most?</h2>
+      <div class="final-cuisine" id="finalCuisineChoices"></div>
+    </div>
+    
+    <!-- Step 5: Final Recommendation -->
+    <div id="step5" class="step">
+      <h2>Your Final Recommendation</h2>
+      <div id="finalRecommendation"></div>
+      <div class="restart-button">
+        <button onclick="restartWizard()">Restart</button>
+      </div>
+    </div>
+    
+  </div>
+  
+  <script>
+    // FoodRecommender class implemented in JS.
+    class FoodRecommender {
+      constructor() {
+        this.textures = {
+          "meaty": { description: "Rich protein-focused dishes", intensity: 5 },
+          "crispy": { description: "Crunchy, textured dishes", intensity: 4 },
+          "soupy": { description: "Liquid-based dishes", intensity: 3 },
+          "soft": { description: "Tender, gentle textures", intensity: 2 },
+          "carby": { description: "Starch-focused dishes", intensity: 4 },
+          "fresh": { description: "Light, raw dishes", intensity: 1 }
+        };
 
-    <script>
-        let correctAnswers = 0;
-        let totalAnswers = 0;
-
-        function checkAnswer(questionNumber, button) {
-            const questionButtons = button.parentElement.getElementsByTagName('button');
-            
-            // Reset all buttons in this question
-            for (let btn of questionButtons) {
-                btn.className = '';
-            }
-
-            // Check if this is the correct answer
-            if (button.getAttribute('data-correct') === 'true') {
-                button.className = 'correct';
-                correctAnswers++;
-            } else {
-                button.className = 'incorrect';
-                // Show the correct answer
-                for (let btn of questionButtons) {
-                    if (btn.getAttribute('data-correct') === 'true') {
-                        btn.className = 'correct';
-                    }
-                }
-            }
-            totalAnswers++;
+        this.cuisines = {
+          "japanese": {
+            "meaty": ["Yakitori", "Sukiyaki", "Teppanyaki", "Tonkatsu"],
+            "crispy": ["Tempura", "Karaage", "Crispy Gyoza", "Tonkatsu"],
+            "soupy": ["Ramen", "Udon", "Shabu Shabu", "Miso Soup"],
+            "soft": ["Sashimi", "Chawanmushi", "Silken Tofu"],
+            "carby": ["Donburi", "Sushi Rolls", "Curry Rice"],
+            "fresh": ["Raw Fish Salad", "Seaweed Salad"]
+          },
+          "mexican": {
+            "meaty": ["Carne Asada", "Al Pastor", "Barbacoa", "Carnitas"],
+            "crispy": ["Tostadas", "Tortilla Chips", "Flautas", "Chicharrones"],
+            "soupy": ["Pozole", "Menudo", "Caldo de Pollo", "Sopa de Tortilla"],
+            "soft": ["Guacamole", "Refried Beans", "Queso Fundido"],
+            "carby": ["Tortillas", "Rice", "Tamales", "Gorditas"],
+            "fresh": ["Ceviche", "Pico de Gallo", "Aguachile"]
+          },
+          "thai": {
+            "meaty": ["Grilled Chicken", "Crying Tiger Beef", "Duck Curry"],
+            "crispy": ["Fish Cakes", "Crispy Morning Glory", "Fried Chicken Wings"],
+            "soupy": ["Tom Yum", "Tom Kha", "Khao Soi", "Boat Noodles"],
+            "soft": ["Green Curry", "Steamed Fish", "Mango Sticky Rice"],
+            "carby": ["Pad Thai", "Fried Rice", "Drunken Noodles"],
+            "fresh": ["Green Papaya Salad", "Larb", "Yum Salads"]
+          },
+          "italian": {
+            "meaty": ["Osso Buco", "Bistecca", "Saltimbocca", "Porchetta"],
+            "crispy": ["Calamari Fritti", "Arancini", "Crostini"],
+            "soupy": ["Minestrone", "Zuppa di Pesce", "Tortellini in Brodo"],
+            "soft": ["Burrata", "Gnocchi", "Risotto", "Polenta"],
+            "carby": ["Various Pasta", "Pizza", "Focaccia", "Ciabatta"],
+            "fresh": ["Caprese", "Carpaccio", "Insalata"]
+          },
+          "indian": {
+            "meaty": ["Tandoori Dishes", "Kebabs", "Rogan Josh", "Vindaloo"],
+            "crispy": ["Papadum", "Samosas", "Pakoras", "Bhel Puri"],
+            "soupy": ["Dal", "Rasam", "Sambar", "Mulligatawny"],
+            "soft": ["Paneer Dishes", "Butter Chicken", "Malai Kofta"],
+            "carby": ["Naan", "Biryani", "Roti", "Paratha"],
+            "fresh": ["Kachumber", "Raita", "Fresh Chutneys"]
+          },
+          "vietnamese": {
+            "meaty": ["Grilled Pork", "Bo Luc Lac", "BBQ Pork Chops"],
+            "crispy": ["Banh Xeo", "Cha Gio", "Banh Mi"],
+            "soupy": ["Pho", "Bun Bo Hue", "Canh Soups"],
+            "soft": ["Steamed Rice Rolls", "Silken Tofu Dishes"],
+            "carby": ["Broken Rice", "Bun Noodles", "Com Tam"],
+            "fresh": ["Goi Cuon", "Green Papaya Salad", "Herb Platters"]
+          },
+          "korean": {
+            "meaty": ["Korean BBQ", "Galbi", "Bulgogi", "Samgyeopsal"],
+            "crispy": ["Korean Fried Chicken", "Pajeon", "Kimchi Pancake"],
+            "soupy": ["Kimchi Jjigae", "Seolleongtang", "Samgyetang"],
+            "soft": ["Soft Tofu Stew", "Steamed Eggs", "Bibimbap"],
+            "carby": ["Rice Bowls", "Tteokbokki", "Japchae"],
+            "fresh": ["Namul", "Fresh Kimchi", "Ssam"]
+          },
+          "french": {
+            "meaty": ["Coq au Vin", "Boeuf Bourguignon", "Cassoulet"],
+            "crispy": ["Duck Confit", "Pommes Frites", "Croissants"],
+            "soupy": ["French Onion Soup", "Bouillabaisse", "Consommé"],
+            "soft": ["Soufflés", "Quenelles", "Mousse"],
+            "carby": ["Baguettes", "Gratin Dauphinois", "Crepes"],
+            "fresh": ["Nicoise Salad", "Herb Salads", "Tartare"]
+          },
+          "spanish": {
+            "meaty": ["Jamón Ibérico", "Chorizo", "Cochinillo Asado"],
+            "crispy": ["Croquetas", "Calamares Fritos", "Patatas Bravas"],
+            "soupy": ["Gazpacho", "Caldo Gallego", "Fabada"],
+            "soft": ["Tortilla Española", "Flan", "Pulpo a la Gallega"],
+            "carby": ["Paella", "Fideuà", "Arroz Negro"],
+            "fresh": ["Ensaladilla Rusa", "Boquerones", "Mixed Olives"]
+          },
+          "chinese": {
+            "meaty": ["Kung Pao Chicken", "Char Siu", "Peking Pork Belly"],
+            "crispy": ["General Tso's Chicken", "Crispy Spring Rolls", "Crispy Duck"],
+            "soupy": ["Hot and Sour Soup", "Wonton Soup", "Egg Drop Soup"],
+            "soft": ["Steamed Dumplings", "Soft Tofu", "Silken Tofu with Soy Sauce"],
+            "carby": ["Lo Mein", "Fried Rice", "Chow Mein"],
+            "fresh": ["Smashed Cucumber Salad", "Fresh Bean Sprouts", "Cold Noodle Salad"]
+          }
+        };
+      }
+    
+      getDishesByTexture(texture, cuisine) {
+        if (this.cuisines.hasOwnProperty(cuisine) &&
+            this.cuisines[cuisine].hasOwnProperty(texture)) {
+          return this.cuisines[cuisine][texture];
         }
-
-        function showResult() {
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            
-            let message;
-            if (correctAnswers === 5) {
-                message = "Perfect score! You're the most amazing boyfriend ever! 💑";
-                resultDiv.style.background = '#e8f5e9';
-            } else if (correctAnswers >= 3) {
-                message = "Not bad! You know me pretty well! 💕";
-                resultDiv.style.background = '#fff3e0';
-            } else {
-                message = "Well... maybe we need more date nights! 😘";
-                resultDiv.style.background = '#ffebee';
-            }
-            
-            resultDiv.innerHTML = `
-                <h2>Quiz Complete!</h2>
-                <p>You got ${correctAnswers} out of ${totalAnswers} correct!</p>
-                <p>${message}</p>
-                <p>Happy 2nd Anniversary! ❤️</p>
-            `;
+        return [];
+      }
+      
+      recommendMeal(cuisine, textures) {
+        // Accept an array of textures and return union of dishes (no duplicates)
+        let dishes = [];
+        if (!Array.isArray(textures)) textures = [textures];
+        textures.forEach(texture => {
+          dishes = dishes.concat(this.getDishesByTexture(texture, cuisine));
+        });
+        dishes = Array.from(new Set(dishes));
+        return { primaryDishes: dishes };
+      }
+      
+      getAllCuisines() {
+        return Object.keys(this.cuisines);
+      }
+      
+      getAllTextures() {
+        return Object.keys(this.textures);
+      }
+    }
+    
+    // Global wizard data.
+    const wizard = {
+      hunger: "",
+      textures: [], // Array of 2 textures.
+      cuisines: []  // Array of selected cuisines (up to 3).
+    };
+    
+    // Create an instance of FoodRecommender.
+    const recommender = new FoodRecommender();
+    
+    // ----- Step Navigation Helper -----
+    function showStep(stepId) {
+      document.querySelectorAll(".step").forEach(step => {
+        step.classList.remove("active");
+      });
+      document.getElementById(stepId).classList.add("active");
+    }
+    
+    // ----- Step 1: Hungry Level -----
+    function selectHunger(level) {
+      wizard.hunger = level;
+      showStep("step2");
+    }
+    
+    // ----- Step 2: Texture Selection (Pick exactly 2) -----
+    function populateTextureCheckboxes() {
+      const container = document.getElementById("textureCheckboxes");
+      container.innerHTML = "";
+      const textures = recommender.getAllTextures();
+      textures.forEach(texture => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${texture}" onchange="checkTextureLimit(this)"> ${texture.charAt(0).toUpperCase()}${texture.slice(1)}`;
+        container.appendChild(label);
+      });
+    }
+    
+    // Limit textures selection to exactly 2.
+    function checkTextureLimit(checkbox) {
+      const checkedBoxes = document.querySelectorAll('#textureCheckboxes input[type="checkbox"]:checked');
+      if (checkedBoxes.length > 2) {
+        checkbox.checked = false;
+        alert("Please select exactly 2 textures.");
+      }
+    }
+    
+    function submitTextures() {
+      const checkedBoxes = document.querySelectorAll('#textureCheckboxes input[type="checkbox"]:checked');
+      if (checkedBoxes.length !== 2) {
+        alert("Please select exactly 2 textures.");
+        return;
+      }
+      wizard.textures = Array.from(checkedBoxes).map(cb => cb.value);
+      showStep("step3");
+    }
+    
+    // ----- Step 3: Cuisine Selection (Pick up to 3) -----
+    function populateCuisineCheckboxes() {
+      const container = document.getElementById("cuisineCheckboxes");
+      container.innerHTML = "";
+      const cuisines = recommender.getAllCuisines();
+      cuisines.forEach(cuisine => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${cuisine}" onchange="checkCuisineLimit(this)"> ${cuisine.charAt(0).toUpperCase()}${cuisine.slice(1)}`;
+        container.appendChild(label);
+      });
+    }
+    
+    // Limit cuisine selection to 3.
+    function checkCuisineLimit(checkbox) {
+      const checkedBoxes = document.querySelectorAll('#cuisineCheckboxes input[type="checkbox"]:checked');
+      if (checkedBoxes.length > 3) {
+        checkbox.checked = false;
+        alert("Please select up to 3 cuisines.");
+      }
+    }
+    
+    function submitCuisines() {
+      const checkedBoxes = document.querySelectorAll('#cuisineCheckboxes input[type="checkbox"]:checked');
+      if (checkedBoxes.length === 0) {
+        alert("Please select at least one cuisine.");
+        return;
+      }
+      wizard.cuisines = Array.from(checkedBoxes).map(cb => cb.value);
+      showRecommendations();
+      showStep("step4");
+    }
+    
+    // ----- Step 4: Show Recommendations & Final Cuisine Choice -----
+    function showRecommendations() {
+      const recommendationsDiv = document.getElementById("recommendations");
+      recommendationsDiv.innerHTML = "";
+    
+      // For each selected cuisine, show recommended dishes based on the 2 chosen textures.
+      wizard.cuisines.forEach(cuisine => {
+        const rec = recommender.recommendMeal(cuisine, wizard.textures);
+        const container = document.createElement("div");
+        container.style.marginBottom = "20px";
+    
+        const header = document.createElement("h3");
+        header.textContent = `${cuisine.charAt(0).toUpperCase()}${cuisine.slice(1)} Recommendations:`;
+        container.appendChild(header);
+    
+        if (rec.primaryDishes.length > 0) {
+          const ul = document.createElement("ul");
+          ul.className = "dish-list";
+          rec.primaryDishes.forEach(dish => {
+            const li = document.createElement("li");
+            li.textContent = dish;
+            ul.appendChild(li);
+          });
+          container.appendChild(ul);
+        } else {
+          const p = document.createElement("p");
+          p.textContent = "No recommendations available.";
+          container.appendChild(p);
         }
-    </script>
+    
+        recommendationsDiv.appendChild(container);
+      });
+    
+      // Build final selection buttons for the chosen cuisines.
+      const finalCuisineDiv = document.getElementById("finalCuisineChoices");
+      finalCuisineDiv.innerHTML = "";
+      wizard.cuisines.forEach(cuisine => {
+        const btn = document.createElement("button");
+        btn.textContent = cuisine.charAt(0).toUpperCase() + cuisine.slice(1);
+        btn.onclick = () => selectFinalCuisine(cuisine);
+        finalCuisineDiv.appendChild(btn);
+      });
+    }
+    
+    // ----- Step 5: Final Recommendation -----
+    function selectFinalCuisine(cuisine) {
+      const rec = recommender.recommendMeal(cuisine, wizard.textures);
+      let finalMessage = `<h3>${cuisine.charAt(0).toUpperCase()}${cuisine.slice(1)} Cuisine</h3>`;
+      if (rec.primaryDishes.length > 0) {
+        const dish = rec.primaryDishes[Math.floor(Math.random() * rec.primaryDishes.length)];
+        finalMessage += `<p>Since you're ${wizard.hunger.toLowerCase()} and craving ${wizard.textures.join(" & ")}, we recommend trying <strong>${dish}</strong>!</p>`;
+      } else {
+        finalMessage += `<p>Unfortunately, there are no recommendations available for your selection.</p>`;
+      }
+      document.getElementById("finalRecommendation").innerHTML = finalMessage;
+      showStep("step5");
+    }
+    
+    // Restart the wizard.
+    function restartWizard() {
+      wizard.hunger = "";
+      wizard.textures = [];
+      wizard.cuisines = [];
+      // Repopulate checkboxes.
+      populateTextureCheckboxes();
+      populateCuisineCheckboxes();
+      showStep("step1");
+    }
+    
+    // Initialize checkboxes once the DOM is loaded.
+    document.addEventListener("DOMContentLoaded", function() {
+      populateTextureCheckboxes();
+      populateCuisineCheckboxes();
+    });
+  </script>
 </body>
 </html>
